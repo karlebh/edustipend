@@ -1,0 +1,70 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-size: 'Nunito';
+}
+
+.grad {
+  background-image: linear-gradient(to right, white,orange,yellow);
+}
+
+.growDown {
+  animation: growDown 300ms ease-in-out forwards;
+  transform-origin: top center;
+}
+
+@keyframes growDown {
+  0% {
+    transform: scaleY(0);
+  }
+  80% {
+    transform: scaleY(1.1);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+.growUp {
+  animation: growUp 300ms ease-in-out;
+  transform-origin: bottom center;
+}
+
+@keyframes growUp {
+  0% {
+    transform: scaleY(1);
+  }
+  80% {
+    transform: scaleY(1.1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+.splide__slide {
+  opacity: 0.4;
+}
+
+.splide__slide.is-active {
+  opacity: 1;
+}
+
+.searchDisplay::-webkit-scrollbar{
+  width: 1rem;
+}
+
+.searchDisplay::-webkit-scrollbar-track {
+  border-right: 9px solid transparent;
+  border-left: 9px solid transparent;
+  background-color: transparent;
+  -webkit-box-shadow: inset 0 0 6px #ddd;
+}
+
+.searchDisplay::-webkit-scrollbar-thumb {
+  background: #ccc;
+  cursor: pointer;
+  border-radius: 7px;
+}
