@@ -21,10 +21,13 @@ const Details = () => {
       .then(resp => {
         const IMAGE_URL = "https://image.tmdb.org/t/p/original"
         const casts = resp.data.cast
-        casts.forEach(
-          cast => (cast.profile_path = IMAGE_URL + cast.profile_path)
-        )
-        setCredits(casts)
+        let newCasts = []
+        for (let i = 0; i < casts.length; i++) {
+          if (!casts[i].profile_path) continue
+          casts[i].profile_path = IMAGE_URL + casts[i].profile_path
+          newCasts.push(casts[i])
+        }
+        setCredits(newCasts)
       })
       .catch(err => console.log(err.message))
   }, [])
@@ -37,7 +40,7 @@ const Details = () => {
 
       <img
         src={"https://image.tmdb.org/t/p/original/" + movie.poster_path}
-        className="h-[40rem] w-[98%] md:w-[80%] mx-auto rounded-lg"
+        className="h-[20rem] lg:h-[40rem] w-[98%] md:w-[80%] mx-auto rounded-lg"
         alt=""
       />
 
@@ -64,8 +67,8 @@ const Details = () => {
 
       <h1 className="mt-5 font-sans text-2xl">Credits</h1>
 
-      <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-        {credits.map((cast, id) => (
+      <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-2 lg:px-4">
+        {credits.slice(0, 16).map((cast, id) => (
           <div
             key={id}
             className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 lg:cursor-pointer lg:transition-all lg:duration-500  `}
@@ -79,6 +82,12 @@ const Details = () => {
               <h1 className="font-bold text-sm text-zinc-300 text-left mb-3 ">
                 {cast.original_name}
               </h1>
+
+              <h1 className="text-sm text-zinc-300 text-left mb-3 ">
+                {cast.character}
+              </h1>
+              
+
               <div></div>
             </div>
           </div>

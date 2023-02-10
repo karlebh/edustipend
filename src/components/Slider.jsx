@@ -27,7 +27,7 @@ const Slider = ({ images }) => {
     })
 
     let thumbnails = new Splide("#thumbnail-carousel", {
-      perPage: 3,
+      perPage: screen.width  >= 768 ? 4 : 2,
       fixedHeight: 60,
       gap: 10,
       rewind: true,
