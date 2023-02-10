@@ -34,7 +34,7 @@ const WatchList = () => {
   }, [])
 
   function getGenre(id) {
-    return genres.find(genre => id == genre.id)["name"]
+    return genres.find(genre => id == genre.id).name
   }
 
   return (

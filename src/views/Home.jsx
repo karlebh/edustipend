@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Slider from "../components/Slider"
 import Parties from "../components/Parties"
 import Watching from "../components/Watching"
-import SideBar from "../components/SideBar"
+import Loader from "../components/Loader"
 
 const Home = () => {
   const localMovies = localStorage.movies ? JSON.parse(localStorage.movies) : []
@@ -44,7 +44,7 @@ const Home = () => {
         .request(options)
         .then(function (response) {
           let data = response.data.results
-          const IMAGE_URL = "https://image.tmdb.org/t/p/original/"
+          const IMAGE_URL = "https://image.tmdb.org/t/p/original"
           data.forEach(movie => {
             let slug = movie.original_title
               .replaceAll(" ", "-")
@@ -65,17 +65,23 @@ const Home = () => {
   }, [])
 
   function getGenre(id) {
-    return genres.find(genre => id == genre.id)["name"]
+    return genres.find(genre => id == genre.id).name
   }
   const thumbnails = movies
   return (
     <main className="px-4 lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
-      <div className="mx-auto relative">
-        <Slider images={thumbnails} movies={movies} />
-      </div>
+      {movies ? (
+        <span>
+          <div className="mx-auto relative">
+            <Slider images={thumbnails} movies={movies} />
+          </div>
 
-      <Parties movies={movies} getGenre={getGenre} />
-      <Watching movies={movies} getGenre={getGenre} />
+          <Parties movies={movies} getGenre={getGenre} />
+          <Watching movies={movies} getGenre={getGenre} />
+        </span>
+      ) : (
+        <Loader />
+      )}
     </main>
   )
 }
