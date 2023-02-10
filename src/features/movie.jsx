@@ -8,7 +8,7 @@ const movieSlice = createSlice({
       movies: [],
       genres: [],
       genreUrl:
-        "http://api.themoviedb.org/3/genre/movie/list?api_key=7316fba02f75311274d240dc8ac61a66",
+        "https://api.themoviedb.org/3/genre/movie/list?api_key=7316fba02f75311274d240dc8ac61a66",
       options: {
         method: "GET",
         url: "https://api.themoviedb.org/3/movie/popular?api_key=7316fba02f75311274d240dc8ac61a66",
