@@ -21,7 +21,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (!genres.length) {
+    // if (!genres.length) {
       axios
         .get(genreUrl)
         .then(function (response) {
@@ -35,7 +35,7 @@ const Home = () => {
         .catch(function (error) {
           console.error(error)
         })
-    }
+    // }
   }, [])
 
   useEffect(() => {
