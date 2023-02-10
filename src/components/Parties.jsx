@@ -7,11 +7,9 @@ import b from "../assets/b.jpg"
 import e from "../assets/e.jpg"
 
 const Parties = ({ movies, getGenre }) => {
-  // const shuffledImages = [a, b, c, d, e].sort(() => Math.random() - 0.5)
-  // console.log(shuffledImages)
   return (
     <section>
-      <div className="flex items-baseline mt-5">
+      <div className="flex items-baseline">
         <h2 className="font-bold text-gray-300">Parties</h2>
         <span className="ml-16 rounded-lg w-8 h-3.5 bg-amber-900 inline-block"></span>
       </div>

@@ -5,32 +5,29 @@ import { useDispatch } from "react-redux"
 
 const WatchList = () => {
   const [pageCount, setPageCount] = useState(4)
-
   const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
   const localMovies = localStorage.watchlist
     ? JSON.parse(localStorage.watchlist)
     : []
   const [movies, setWatchlist] = useState(localMovies)
   const [genres, setGenres] = useState(localGenres)
-  const IMAGE_URL = "https://image.tmdb.org/t/p/original/"
+  const IMAGE_URL = "https://image.tmdb.org/t/p/original"
   const navigate = useNavigate()
 
   useEffect(() => {
-    async function getMovies() {
-      if (!localMovies)
-        await axios
-          .request({
-            method: "GET",
-            url: `https://api.themoviedb.org/3/movie/now_playing?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
-          })
+    const watchlist = async () => {
+      if (!movies.length)
+        axios
+          .get(
+            "https://api.themoviedb.org/3/movie/now_playing?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1"
+          )
           .then(res => {
-            setWatchlist([...res.data])
-            localStorage.setItem("watchlist", JSON.parse(movies))
-            console.log(res)
+            setWatchlist([...res.data.results])
+            localStorage.setItem("watchlist", JSON.stringify(res.data.results))
           })
           .catch(err => err.message)
     }
-    getMovies()
+    watchlist()
   }, [])
 
   function getGenre(id) {
@@ -42,7 +39,7 @@ const WatchList = () => {
       {" "}
       <section>
         <div className="flex items-baseline mt-20">
-          <h2 className="font-bold text-gray-300"></h2>
+          <h2 className="font-bold text-gray-300">Watchlist</h2>
           <span className="ml-16 rounded-lg w-8 h-3.5 bg-amber-900 inline-block"></span>
         </div>
 

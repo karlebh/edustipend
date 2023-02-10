@@ -21,47 +21,53 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (!genres.length) {
-      axios
-        .get(genreUrl)
-        .then(function (response) {
-          console.log(response.data)
-          setGenres([...response.data.genres])
-          localStorage.setItem(
-            "genres",
-            JSON.stringify([...response.data.genres])
-          )
-        })
-        .catch(function (error) {
-          console.error(error)
-        })
+    const genres = async () => {
+      if (!genres.length) {
+        await axios
+          .get(genreUrl)
+          .then(function (response) {
+            setGenres([...response.data.genres])
+            localStorage.setItem(
+              "genres",
+              JSON.stringify([...response.data.genres])
+            )
+          })
+          .catch(function (error) {
+            console.error(error.message)
+          })
+      }
     }
+
+    genres()
   }, [])
 
   useEffect(() => {
-    if (!movies.length) {
-      axios
-        .request(options)
-        .then(function (response) {
-          let data = response.data.results
-          const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-          data.forEach(movie => {
-            let slug = movie.original_title
-              .replaceAll(" ", "-")
-              .replaceAll(":", "")
-              .replaceAll(",", "")
-              .toLowerCase()
-            movie.poster_path = IMAGE_URL + movie.poster_path
-            movie.backdrop_path = IMAGE_URL + movie.backdrop_path
-            Object.assign(movie, { slug })
+    const movies = async () => {
+      if (!movies.length) {
+        await axios
+          .request(options)
+          .then(function (response) {
+            let data = response.data.results
+            const IMAGE_URL = "https://image.tmdb.org/t/p/original"
+            data.forEach(movie => {
+              let slug = movie.original_title
+                .replaceAll(" ", "-")
+                .replaceAll(":", "")
+                .replaceAll(",", "")
+                .toLowerCase()
+              movie.poster_path = IMAGE_URL + movie.poster_path
+              movie.backdrop_path = IMAGE_URL + movie.backdrop_path
+              Object.assign(movie, { slug })
+            })
+            setMovies([...data])
+            localStorage.setItem("movies", JSON.stringify([...data]))
           })
-          setMovies([...data])
-          localStorage.setItem("movies", JSON.stringify([...data]))
-        })
-        .catch(function (error) {
-          console.error(error)
-        })
+          .catch(function (error) {
+            console.error(error.message)
+          })
+      }
     }
+    movies()
   }, [])
 
   function getGenre(id) {
@@ -72,10 +78,7 @@ const Home = () => {
     <main className="px-4 lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       {movies ? (
         <span>
-          <div className="mx-auto relative">
-            <Slider images={thumbnails} movies={movies} />
-          </div>
-
+          <Slider images={thumbnails} movies={movies} />
           <Parties movies={movies} getGenre={getGenre} />
           <Watching movies={movies} getGenre={getGenre} />
         </span>

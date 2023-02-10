@@ -9,6 +9,7 @@ import './index.css'
 import movieReducer from './features/movie'
 
 window.axios = axios
+window.image_url = "https://image.tmdb.org/t/p/original"
 
 const store = configureStore({
   reducer: {

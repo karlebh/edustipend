@@ -37,19 +37,19 @@ const Details = () => {
 
       <img
         src={"https://image.tmdb.org/t/p/original/" + movie.poster_path}
-        className="h-[40rem] w-[80%] mx-auto rounded-lg"
+        className="h-[40rem] w-[98%] md:w-[80%] mx-auto rounded-lg"
         alt=""
       />
 
       <div className="mt-4">
         {movie.genre_ids.map(id => (
-          <span key={id} className="text-2xl font-semibold mr-5">
+          <span key={id} className="text-xl font-semibold mr-5">
             {getGenre(id)}
           </span>
         ))}
       </div>
 
-      <div className="mt-3 text-2xl text-amber-500 font-normal">
+      <div className="mt-3 text-lg text-amber-500 font-normal">
         {movie.vote_average} / 10 based on {movie.vote_count} votes
       </div>
 
@@ -58,7 +58,7 @@ const Details = () => {
         <span>Released Date:</span> {moment(movie.release_date).format("ll")}
       </p>
 
-      <div className="mt-7 font-semibold text-xl text-justify lg:px-4">
+      <div className="mt-7 font-semibold text-md text-justify lg:px-4 text-neutral-100">
         {movie.overview}
       </div>
 
@@ -68,7 +68,7 @@ const Details = () => {
         {credits.map((cast, id) => (
           <div
             key={id}
-            className={`flex-shrink-0 rounded-lg bg-zinc-800 hover:scale-105 cursor-pointer transition-all duration-500  `}
+            className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 lg:cursor-pointer lg:transition-all lg:duration-500  `}
           >
             <img
               src={`${cast.profile_path}`}

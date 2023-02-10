@@ -33,7 +33,6 @@ const Slider = ({ images }) => {
       rewind: true,
       pagination: false,
       isNavigation: true,
-      // width: 100,
     })
 
     main.sync(thumbnails)
@@ -41,11 +40,10 @@ const Slider = ({ images }) => {
     thumbnails.mount()
   }, [])
   return (
-    <div className="relative">
+    <div className="h-[30rem]">
       <section
         id="main-carousel"
-        className="splide w-full px-0"
-        aria-label="Splide Basic HTML Example"
+        className="splide w-full p-0"
       >
         <div className="splide__track">
           <ul className="splide__list">
@@ -124,7 +122,7 @@ const Slider = ({ images }) => {
           </ul>
         </div>
       </section>
-      <div className="absolute md:w-5/12 right-0 bottom-2 ">
+      <div className="relative bottom-10">
         <section id="thumbnail-carousel" className="splide">
           <div className="splide__track">
             <ul className="splide__list">
@@ -142,6 +140,24 @@ const Slider = ({ images }) => {
           </div>
         </section>
       </div>
+      {/* <div className="absolute md:w-5/12 right-0 bottom-2 ">
+        <section id="thumbnail-carousel" className="splide">
+          <div className="splide__track">
+            <ul className="splide__list">
+              {images.map((movie, id) => (
+                <li key={id} className="splide__slide">
+                  <img
+                    src={`${movie.backdrop_path}`}
+                    alt=""
+                    className="image cover w-full center h-full"
+                    id={id}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </div> */}
     </div>
   )
 }

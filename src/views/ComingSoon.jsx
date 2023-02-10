@@ -13,24 +13,21 @@ const ComingSoon = () => {
   const [genres, setGenres] = useState(localGenres)
   const IMAGE_URL = "https://image.tmdb.org/t/p/original/"
   const navigate = useNavigate()
-  console.log(navigate)
 
   useEffect(() => {
     async function getMovies() {
-      if (!localMovies)
-        await axios
-          .request({
-            method: "GET",
-            url: `https://api.themoviedb.org/3/movie/upcoming?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
-          })
-          .then(res => {
-            setLatestMovies([...res.data])
-            localStorage.setItem("comingSoon", JSON.parse(movies))
-            console.log(res)
-          })
-          .catch(err => err.message)
+    if (!movies.length)
+      axios
+        .request({
+          method: "GET",
+          url: `https://api.themoviedb.org/3/movie/upcoming?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
+        })
+        .then(res => {
+          setLatestMovies([...res.data.results])
+          localStorage.setItem("comingSoon", JSON.stringify(res.data.results))
+        })
+        .catch(err => err.message)
     }
-
     getMovies()
   }, [])
 
@@ -41,7 +38,7 @@ const ComingSoon = () => {
   return (
     <section>
       <div className="flex items-baseline mt-20">
-        <h2 className="font-bold text-gray-300">Continue Watching</h2>
+        <h2 className="font-bold text-gray-300">Coming Soon</h2>
         <span className="ml-16 rounded-lg w-8 h-3.5 bg-amber-900 inline-block"></span>
       </div>
 
