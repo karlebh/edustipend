@@ -62,6 +62,8 @@ const Details = () => {
         {movie.overview}
       </div>
 
+      <h1 className="mt-5 font-sans text-2xl">Credits</h1>
+
       <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {credits.map((cast, id) => (
           <div
