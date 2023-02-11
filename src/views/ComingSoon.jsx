@@ -37,7 +37,7 @@ const ComingSoon = () => {
 
   return (
     <section>
-      <div className="flex items-baseline mt-20">
+      <div className="flex items-baseline mt-5">
         <h2 className="font-bold text-gray-300">Coming Soon</h2>
         <span className="ml-16 rounded-lg w-8 h-3.5 bg-amber-900 inline-block"></span>
       </div>

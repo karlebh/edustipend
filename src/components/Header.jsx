@@ -1,35 +1,48 @@
 import axios from "axios"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { Link } from "react-router-dom"
 
 import SearchDropDown from "./SearchDropDown"
 import a from "../assets/a.jpg"
 import MobileDropDownLinks from "./MobileDropDownLinks"
+
+async function search(query, callback) {
+  await axios
+    .request({
+      method: "GET",
+      url: `https://api.themoviedb.org/3/search/movie?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&query=${query}page=1&include_adult=false`,
+    })
+    .then(res => {
+      console.log(res.data.results)
+      let data = response.data.results
+      const IMAGE_URL = "https://image.tmdb.org/t/p/original"
+      data.forEach(movie => {
+        let slug = movie.original_title
+          .replaceAll(" ", "-")
+          .replaceAll(":", "")
+          .replaceAll(",", "")
+          .toLowerCase()
+        movie.poster_path = IMAGE_URL + movie.poster_path
+        movie.backdrop_path = IMAGE_URL + movie.backdrop_path
+        Object.assign(movie, { slug })
+        callback(res.data.results)
+      })
+    }).catch(err => console.log(err.message))
+}
+
+const debouncedSearch = debounce((query, callback) => {
+  search(query, callback)
+}, 200)
+
 const Header = () => {
-  const [search, setSearch] = useState("")
+  const [query, setQuery] = useState("")
   const [results, setResults] = useState([])
   const [showMenu, setShow] = useState(false)
 
-  const Search = throttle((value) => {
-    axios
-      .request({
-        method: "GET",
-        url: `https://api.themoviedb.org/3/search/movie?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&query=endgame&page=1&include_adult=false`,
-      })
-      .then(res => {
-        setResults([...res.data])
-        console.log(res)
-      })
-      .catch(err => err.message)
-  }, 100)
-
-  const debouncedSearch = useCallback(value => Search(value), [])
-
-  function searchMovie(e) {
-    debouncedSearch(e.target.value)
-    setSearch(e.target.value)
-  }
+  useEffect(() => {
+    debouncedSearch(query, res => setResults(res))
+  }, [query])
 
   function toggleSearch() {
     let mobileSearch = document.getElementById("mobileSearch")
@@ -91,7 +104,8 @@ const Header = () => {
               <form
                 action=""
                 className="inline-flex items-center rounded-3xl border border-zinc-800
-               hover:border-zinc-800 hover:border-2 pl-6 pr-4 gap-x-4 transition-all duration-100 hover:outline hover:outline-zinc-500 hover:outline-offset-2"
+               hover:border-zinc-800 hover:border-2 pl-6 pr-4 gap-x-4 transition-all 
+               duration-100 hover:outline hover:outline-zinc-500 hover:outline-offset-2"
               >
                 <div className="p-2">
                   <svg
@@ -114,8 +128,8 @@ const Header = () => {
                   autoComplete="off"
                   name="search"
                   placeholder="Search everything"
-                  onChange={searchMovie}
-                  value={search}
+                  onChange={event => console.log(event)}
+                  value={query}
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-72"
                 />
                 <div>
@@ -135,13 +149,15 @@ const Header = () => {
                   </svg> */}
                 </div>
               </form>
-              {search && <SearchDropDown results={results} />}
+              {query && <SearchDropDown results={query} clear={setQuery("")} />}
             </div>
 
             {!!results.length && (
               <div className="absolute">
                 {results.map((result, id) => (
-                  <div className="h-10">{result.title}</div>
+                  <div className="h-10" key={id}>
+                    {result.title}
+                  </div>
                 ))}
               </div>
             )}
@@ -180,8 +196,8 @@ const Header = () => {
                   autoComplete="off"
                   name="search"
                   placeholder="Search everything"
-                  onChange={searchMovie}
-                  value={search}
+                  onChange={event => console.log(event)}
+                  value={query}
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-96"
                 />
                 <div>
@@ -200,7 +216,7 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                {search && <SearchDropDown results={results} />}
+                {query && <SearchDropDown results={query} />}
               </form>
             </div>
           </div>
@@ -280,8 +296,8 @@ const Header = () => {
           <input
             type="text"
             autoComplete="off"
-            onChange={searchMovie}
-            value={search}
+            onChange={event => setQuery(event.target.value)}
+            value={query}
             placeholder="Search everything"
             className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-full"
           />
@@ -302,7 +318,7 @@ const Header = () => {
             </svg>
           </div>
         </form>
-        {search && <SearchDropDown results={results} />}
+        {query && <SearchDropDown results={query} />}
       </div>
     </div>
   )

@@ -18,6 +18,7 @@ import "@splidejs/splide/css/sea-green"
 import "@splidejs/splide/css/core"
 
 const Slider = ({ images }) => {
+  let screenSize = () => screen.width < 768 ? 4 : 3
   useEffect(() => {
     let main = new Splide("#main-carousel", {
       type: "fade",
@@ -27,7 +28,7 @@ const Slider = ({ images }) => {
     })
 
     let thumbnails = new Splide("#thumbnail-carousel", {
-      perPage: screen.width  >= 768 ? 4 : 2,
+      perPage: screenSize(),
       fixedHeight: 60,
       gap: 10,
       rewind: true,
@@ -40,7 +41,7 @@ const Slider = ({ images }) => {
     thumbnails.mount()
   }, [])
   return (
-    <div className="h-[30rem]">
+    <div className="h-[30rem] mt-5">
       <section
         id="main-carousel"
         className="splide w-full p-0"
