@@ -89,7 +89,7 @@ const Details = () => {
           >
             <img
               src={`${cast.profile_path}`}
-              className="h-[20rem] lg:h-[40rem] w-full min-h-[12rem] rounded-t-lg"
+              className="h-[15rem] w-full min-h-[12rem] rounded-t-lg"
               alt=""
             />
             <div className="px-3 h-32 overflow-hidden mt-3 flex flex-col justify-evenly">
