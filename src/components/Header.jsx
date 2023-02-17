@@ -184,8 +184,7 @@ const Header = () => {
 
             <div className="relative">
               {/* hidden is for animation */}
-              <form
-                action=""
+              <div
                 id="mobileSearch"
                 className="growUp h-12 hidden absolute z-20 bg-zinc-800 text-white 
                 -right-24 top-10 items-center rounded-3xl border border-zinc-800 pl-6 pr-4 gap-x-4 
@@ -219,7 +218,7 @@ const Header = () => {
                   </button>
                 </div>
                 {loading && <SearchDropDown results={results} clear={clear} />}
-              </form>
+              </div>
             </div>
           </div>
 
@@ -274,8 +273,7 @@ const Header = () => {
       </header>
       {/* Mobile Screen */}
       <div className="relative w-full md:hidden">
-        <form
-          action=""
+        <div
           className="flex items-center rounded-3xl border border-zinc-800 px-8 mt-5 gap-x-4 transition-all 
       duration-100 hover:outline hover:outline-zinc-500 hover:outline-offset-2"
         >
@@ -321,7 +319,7 @@ const Header = () => {
               </svg>
             </button>
           </div>
-        </form>
+        </div>
         {loading && <SearchDropDown results={results} clear={clear} />}
       </div>
     </div>

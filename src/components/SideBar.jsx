@@ -2,15 +2,6 @@ import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import { useLocation } from "react-router-dom"
 
-import b from "../assets/b.jpg"
-import c from "../assets/c.jpg"
-import d from "../assets/d.jpg"
-import e from "../assets/e.jpg"
-import f from "../assets/f.jpg"
-import g from "../assets/g.jpg"
-import h from "../assets/h.jpg"
-import i from "../assets/i.jpg"
-
 const SideBar = () => {
   const location = useLocation()
   return (
