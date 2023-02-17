@@ -34,7 +34,7 @@ const Watching = ({ movies, getGenre }) => {
 
       <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {movies.slice(0, pageCount).map((movie, id) => (
-          <Link to={`/movie/${movie.slug}`} key={id}>
+          <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
               className={`flex-shrink-0 rounded-lg bg-zinc-800 hover:scale-105 cursor-pointer transition-all duration-500  `}
             >

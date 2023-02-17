@@ -1,10 +1,5 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import a from "../assets/a.jpg"
-import c from "../assets/c.jpg"
-import d from "../assets/d.jpg"
-import b from "../assets/b.jpg"
-import e from "../assets/e.jpg"
 
 const Parties = ({ movies, getGenre }) => {
   return (
@@ -16,7 +11,7 @@ const Parties = ({ movies, getGenre }) => {
 
       <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {movies.slice(0, 12).map((movie, id) => (
-          <Link to={`movie/${movie.slug}`} key={id}>
+          <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
               className={`flex-shrink-0 flex flex-col items-stretch justify-between rounded-lg h-48 bg-zinc-800 px-3 py-2 `}
             >
@@ -26,23 +21,7 @@ const Parties = ({ movies, getGenre }) => {
                   className="w-20 h-16 object-cover rounded-lg"
                   alt=""
                 />
-                <div className="relative ml-4 -mr-4 flex items-center flex-shrink-0">
-                  <img
-                    src={a}
-                    alt=""
-                    className="w-7 h-7 rounded-full object-cover object-top relative"
-                  />
-                  <img
-                    src={d}
-                    alt=""
-                    className="w-7 h-7 rounded-full object-cover object-top relative -left-3"
-                  />
-                  <img
-                    src={c}
-                    alt=""
-                    className="w-7 h-7 rounded-full object-cover object-top relative -left-6"
-                  />
-                </div>
+              
               </div>
 
               <div className="">

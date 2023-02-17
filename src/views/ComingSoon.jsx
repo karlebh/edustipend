@@ -23,8 +23,23 @@ const ComingSoon = () => {
           url: `https://api.themoviedb.org/3/movie/upcoming?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
         })
         .then(res => {
-          setLatestMovies([...res.data.results])
-          localStorage.setItem("comingSoon", JSON.stringify(res.data.results))
+          let data = res.data.results
+            const IMAGE_URL = "https://image.tmdb.org/t/p/original"
+            data.forEach(movie => {
+              let slug = movie.original_title
+                .replaceAll(" ", "-")
+                .replaceAll(":", "")
+                .replaceAll(",", "")
+                .toLowerCase()
+              movie.poster_path = IMAGE_URL + movie.poster_path
+              movie.backdrop_path = IMAGE_URL + movie.backdrop_path
+              Object.assign(movie, { slug })
+            })
+          setLatestMovies([...data])
+          localStorage.setItem("comingSoon", JSON.stringify(data))
+          let prevData = JSON.parse(localStorage.movies)
+          let newData = [...prevData, ...data]
+          localStorage.setItem('movies', JSON.stringify(newData))
         })
         .catch(err => err.message)
     }
@@ -44,12 +59,12 @@ const ComingSoon = () => {
 
       <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {movies.map((movie, id) => (
-          <Link to={`/movie/${movie.slug}`} key={id}>
+           <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
-              className={`flex-shrink-0 rounded-lg bg-zinc-800 hover:scale-105 cursor-pointer transition-all duration-500  `}
+             className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
             >
               <img
-                src={`${IMAGE_URL}${movie.backdrop_path}`}
+                src={`${movie.backdrop_path}`}
                 className="w-full min-h-[12rem] object-cover rounded-t-lg"
                 alt=""
               />

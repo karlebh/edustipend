@@ -1,9 +1,6 @@
 import React, { useEffect } from "react"
 import Splide from "@splidejs/splide"
 import { AutoScroll } from "@splidejs/splide-extension-auto-scroll"
-import e from "../assets/e.jpg"
-import a from "../assets/a.jpg"
-import b from "../assets/b.jpg"
 import imdb from "../assets/imdb.png"
 import usa from "../assets/usa.jpg"
 
@@ -80,24 +77,6 @@ const Slider = ({ images }) => {
                         <button className="px-4 py-2 bg-amber-700 rounded-2xl text-gray-50 font-semibold">
                           Watch
                         </button>
-                      </div>
-
-                      <div className="relative ml-4 -mr-4 flex flex-shrink-0">
-                        <img
-                          src={a}
-                          alt=""
-                          className="w-7 h-7 rounded-full object-cover object-center relative"
-                        />
-                        <img
-                          src={b}
-                          alt=""
-                          className="w-7 h-7 rounded-full object-cover object-center relative -left-3"
-                        />
-                        <img
-                          src={e}
-                          alt=""
-                          className="w-7 h-7 rounded-full object-cover object-center relative -left-6"
-                        />
                       </div>
                     </div>
 

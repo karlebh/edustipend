@@ -52,7 +52,7 @@ const SideBar = () => {
               </div>
             </button>
           </Link>
-          <Link to={"watchlist"}>
+          <Link to={"/watchlist"}>
             <button
               className={`text-left font-bold border-left inline-flex ${
                 location.pathname == "/watchlist"
@@ -126,133 +126,6 @@ const SideBar = () => {
         </h2>
 
         <div className="mt-7 inline-flex flex-col gap-y-4 pl-16">
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={b}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Ikako.t</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={c}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Nikki.b</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between relative">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={d}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Vika.j</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={e}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Alesanda.b</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={f}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Anna.s</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={g}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Dadd.h</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={h}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Ikako.t</span>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href=""
-            className={`text-left font-bold border-left inline-flex text-zinc-600`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-3">
-                <img
-                  src={i}
-                  className="object-cover w-8 h-8 rounded-full flex-end"
-                  alt=""
-                />
-                <span>Ikako.t</span>
-              </div>
-            </div>
-          </a>
         </div>
       </div>
 

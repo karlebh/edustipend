@@ -75,7 +75,7 @@ const Home = () => {
   }
   const thumbnails = movies
   return (
-    <main className="px-4 lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
+    <main className="lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       {movies ? (
         <span>
           <Slider images={thumbnails} movies={movies} />

@@ -1,48 +1,55 @@
 import axios from "axios"
-import React, { useCallback, useEffect, useState } from "react"
-import { debounce, throttle } from "lodash"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 import SearchDropDown from "./SearchDropDown"
 import a from "../assets/a.jpg"
 import MobileDropDownLinks from "./MobileDropDownLinks"
-
-async function search(query, callback) {
-  await axios
-    .request({
-      method: "GET",
-      url: `https://api.themoviedb.org/3/search/movie?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&query=${query}page=1&include_adult=false`,
-    })
-    .then(res => {
-      console.log(res.data.results)
-      let data = response.data.results
-      const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-      data.forEach(movie => {
-        let slug = movie.original_title
-          .replaceAll(" ", "-")
-          .replaceAll(":", "")
-          .replaceAll(",", "")
-          .toLowerCase()
-        movie.poster_path = IMAGE_URL + movie.poster_path
-        movie.backdrop_path = IMAGE_URL + movie.backdrop_path
-        Object.assign(movie, { slug })
-        callback(res.data.results)
-      })
-    }).catch(err => console.log(err.message))
-}
-
-const debouncedSearch = debounce((query, callback) => {
-  search(query, callback)
-}, 200)
+import useDebounce from "./utils/useDebounce"
 
 const Header = () => {
-  const [query, setQuery] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
   const [results, setResults] = useState([])
   const [showMenu, setShow] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const clear = () => setSearchTerm("")
 
   useEffect(() => {
-    debouncedSearch(query, res => setResults(res))
-  }, [query])
+    if (debouncedSearchTerm) {
+      setLoading(true)
+      search(debouncedSearchTerm)
+    } else {
+      setResults([])
+      setLoading(false)
+    }
+  }, [debouncedSearchTerm])
+
+  async function search(value) {
+    await axios
+      .request({
+        method: "GET",
+        url: `https://api.themoviedb.org/3/search/movie?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&query=${value}&page=1&include_adult=false`,
+      })
+      .then(res => {
+        console.log(res.data.results)
+        let data = res.data.results
+        const IMAGE_URL = "https://image.tmdb.org/t/p/original"
+        data.forEach(movie => {
+          let slug = movie.original_title
+            .replaceAll(" ", "-")
+            .replaceAll(":", "")
+            .replaceAll(",", "")
+            .toLowerCase()
+          movie.poster_path = IMAGE_URL + movie.poster_path
+          movie.backdrop_path = IMAGE_URL + movie.backdrop_path
+          Object.assign(movie, { slug })
+        })
+        setResults(data)
+      })
+      .catch(err => console.log(err.message))
+  }
 
   function toggleSearch() {
     let mobileSearch = document.getElementById("mobileSearch")
@@ -101,8 +108,7 @@ const Header = () => {
 
           <div className="relative hidden lg:block">
             <div className="relative">
-              <form
-                action=""
+              <div
                 className="inline-flex items-center rounded-3xl border border-zinc-800
                hover:border-zinc-800 hover:border-2 pl-6 pr-4 gap-x-4 transition-all 
                duration-100 hover:outline hover:outline-zinc-500 hover:outline-offset-2"
@@ -128,39 +134,33 @@ const Header = () => {
                   autoComplete="off"
                   name="search"
                   placeholder="Search everything"
-                  onChange={event => console.log(event)}
-                  value={query}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  value={searchTerm}
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-72"
                 />
                 <div>
-                  {/* <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                    />
-                  </svg> */}
+                  <button onClick={clear}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </div>
-              </form>
-              {query && <SearchDropDown results={query} clear={setQuery("")} />}
-            </div>
-
-            {!!results.length && (
-              <div className="absolute">
-                {results.map((result, id) => (
-                  <div className="h-10" key={id}>
-                    {result.title}
-                  </div>
-                ))}
               </div>
-            )}
+              {loading && (
+                <SearchDropDown results={results} clear={Uint8ClampedArray} />
+              )}
+            </div>
           </div>
         </div>
 
@@ -196,27 +196,29 @@ const Header = () => {
                   autoComplete="off"
                   name="search"
                   placeholder="Search everything"
-                  onChange={event => console.log(event)}
-                  value={query}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  value={searchTerm}
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-96"
                 />
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                    />
-                  </svg>
+                  <button onClick={clear}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                {query && <SearchDropDown results={query} />}
+                {loading && <SearchDropDown results={results} clear={clear} />}
               </form>
             </div>
           </div>
@@ -296,29 +298,31 @@ const Header = () => {
           <input
             type="text"
             autoComplete="off"
-            onChange={event => setQuery(event.target.value)}
-            value={query}
-            placeholder="Search everything"
+            onChange={e => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            placeholder="Search query"
             className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-full"
           />
           <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-              />
-            </svg>
+            <button onClick={clear}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
         </form>
-        {query && <SearchDropDown results={query} />}
+        {loading && <SearchDropDown results={results} clear={clear} />}
       </div>
     </div>
   )
