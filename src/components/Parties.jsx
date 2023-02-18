@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router-dom"
+import { MovieContext } from "../context/MovieContext"
 
-const Parties = ({ movies, getGenre }) => {
+const Parties = () => {
+  const { getGenre, movies } = useContext(MovieContext)
   return (
     <section>
       <div className="flex items-baseline">
@@ -21,7 +23,6 @@ const Parties = ({ movies, getGenre }) => {
                   className="w-20 h-16 object-cover rounded-lg"
                   alt=""
                 />
-              
               </div>
 
               <div className="">

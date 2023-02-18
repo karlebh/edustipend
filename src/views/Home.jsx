@@ -1,86 +1,29 @@
-import React from "react"
-import { useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 
 import Slider from "../components/Slider"
 import Parties from "../components/Parties"
 import Watching from "../components/Watching"
 import Loader from "../components/Loader"
+import { MovieContext } from "../context/MovieContext"
 
 const Home = () => {
-  const localMovies = localStorage.movies ? JSON.parse(localStorage.movies) : []
-  const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
-  const [count, setCount] = useState(0)
-  const [movies, setMovies] = useState(localMovies)
-  const [genres, setGenres] = useState(localGenres)
-  const [pageCount, setPageCount] = useState(4)
-  const genreUrl =
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=7316fba02f75311274d240dc8ac61a66"
-  const options = {
-    method: "GET",
-    url: "https://api.themoviedb.org/3/movie/popular?api_key=7316fba02f75311274d240dc8ac61a66",
-  }
+  const { getGenres, getMovies, genres, movies } = useContext(MovieContext)
 
   useEffect(() => {
-    const genres = async () => {
-      if (!genres.length) {
-        await axios
-          .get(genreUrl)
-          .then(function (response) {
-            setGenres([...response.data.genres])
-            localStorage.setItem(
-              "genres",
-              JSON.stringify([...response.data.genres])
-            )
-          })
-          .catch(function (error) {
-            console.error(error.message)
-          })
-      }
-    }
-
-    genres()
+    if (!genres.length) getGenres()
   }, [])
 
   useEffect(() => {
-    const movies = async () => {
-      if (!movies.length) {
-        await axios
-          .request(options)
-          .then(function (response) {
-            let data = response.data.results
-            const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-            data.forEach(movie => {
-              let slug = movie.original_title
-                .replaceAll(" ", "-")
-                .replaceAll(":", "")
-                .replaceAll(",", "")
-                .toLowerCase()
-              movie.poster_path = IMAGE_URL + movie.poster_path
-              movie.backdrop_path = IMAGE_URL + movie.backdrop_path
-              Object.assign(movie, { slug })
-            })
-            setMovies([...data])
-            localStorage.setItem("movies", JSON.stringify([...data]))
-          })
-          .catch(function (error) {
-            console.error(error.message)
-          })
-      }
-    }
-    movies()
+    if (!movies.length) getMovies()
   }, [])
 
-  function getGenre(id) {
-    return genres.find(genre => id == genre.id).name
-  }
-  const thumbnails = movies
   return (
     <main className="lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       {movies ? (
         <span>
-          <Slider images={thumbnails} movies={movies} />
-          <Parties movies={movies} getGenre={getGenre} />
-          <Watching movies={movies} getGenre={getGenre} />
+          <Slider images={movies} />
+          <Parties />
+          <Watching />
         </span>
       ) : (
         <Loader />

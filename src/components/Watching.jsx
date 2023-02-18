@@ -1,8 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Link } from "react-router-dom"
 import moment from "moment/moment"
+import { MovieContext } from "../context/MovieContext"
 
-const Watching = ({ movies, getGenre }) => {
+const Watching = () => {
+  const { getGenre, movies } = useContext(MovieContext)
   const screenSize = screen.width
   let count = 0
   let increment = 0

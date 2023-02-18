@@ -4,7 +4,7 @@ import moment from "moment/moment"
 import axios from "axios"
 
 const Details = () => {
-  const { id, slug } = useParams()
+  const { id } = useParams()
 
   const localMovies = localStorage.movies ? JSON.parse(localStorage.movies) : []
   const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
@@ -68,14 +68,14 @@ const Details = () => {
       </div>
 
       <div className="mt-3 text-lg text-amber-500 font-normal">
-        {movie.vote_average} / 10 based on {movie.vote_count} votes
+        {movie.vote_average?.toFixed(0)} / 10 based on {movie.vote_count} votes
       </div>
 
       <p className="text-zinc-500 text-xl mt-5">
         <span>Released Date:</span> {moment(movie.release_date).format("ll")}
       </p>
 
-      <div className="mt-7 font-semibold text-md text-justify lg:px-4 text-neutral-100">
+      <div className="mt-7 font-semibold text-md text-justify lg:px-4 text-neutral-400">
         {movie.overview}
       </div>
 

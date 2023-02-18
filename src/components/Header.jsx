@@ -1,72 +1,55 @@
-import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 import SearchDropDown from "./SearchDropDown"
 import a from "../assets/a.jpg"
 import MobileDropDownLinks from "./MobileDropDownLinks"
-import useDebounce from "./utils/useDebounce"
+import useDebounce from "../utils/useDebounce"
+import { useContext } from "react"
+import { MovieContext } from "../context/MovieContext"
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("")
-  const [results, setResults] = useState([])
   const [showMenu, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const { movieData, addResults, toggleSearch } = useContext(MovieContext)
+
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
   const clear = () => setSearchTerm("")
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      setLoading(true)
-      search(debouncedSearchTerm)
-    } else {
-      setResults([])
-      setLoading(false)
-    }
-  }, [debouncedSearchTerm])
-
-  async function search(value) {
+  const search = async value => {
     await axios
       .request({
         method: "GET",
         url: `https://api.themoviedb.org/3/search/movie?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&query=${value}&page=1&include_adult=false`,
       })
       .then(res => {
-        console.log(res.data.results)
         let data = res.data.results
-        const IMAGE_URL = "https://image.tmdb.org/t/p/original"
         data.forEach(movie => {
           let slug = movie.original_title
             .replaceAll(" ", "-")
             .replaceAll(":", "")
             .replaceAll(",", "")
             .toLowerCase()
-          movie.poster_path = IMAGE_URL + movie.poster_path
-          movie.backdrop_path = IMAGE_URL + movie.backdrop_path
+          movie.poster_path = movieData.image_url + movie.poster_path
+          movie.backdrop_path = movieData.image_url + movie.backdrop_path
           Object.assign(movie, { slug })
         })
-        setResults(data)
+        addResults(data)
       })
       .catch(err => console.log(err.message))
   }
 
-  function toggleSearch() {
-    let mobileSearch = document.getElementById("mobileSearch")
-
-    if (mobileSearch.classList.contains("hidden")) {
-      mobileSearch.classList.replace("hidden", "inline-flex")
-      mobileSearch.classList.remove("growUp")
-      mobileSearch.classList.add("growDown")
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      setLoading(true)
+      search(debouncedSearchTerm)
+      setLoading(false)
     } else {
-      mobileSearch.classList.remove("growDown")
-      mobileSearch.classList.add("growUp")
-      setTimeout(
-        () => mobileSearch.classList.replace("inline-flex", "hidden"),
-        200
-      )
+      addResults([])
+      setLoading(true)
     }
-  }
+  }, [debouncedSearchTerm])
 
   return (
     <div>
@@ -139,27 +122,27 @@ const Header = () => {
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-72"
                 />
                 <div>
-                  <button onClick={clear}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                  {searchTerm.length > 2 && (
+                    <button onClick={clear}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
                 </div>
               </div>
-              {loading && (
-                <SearchDropDown results={results} clear={Uint8ClampedArray} />
-              )}
+              {loading || <SearchDropDown clear={clear} />}
             </div>
           </div>
         </div>
@@ -167,7 +150,10 @@ const Header = () => {
         {/* tablet screen */}
         <div className="flex items-center">
           <div className="sm:hidden md:flex lg:hidden flex mr-3 md:mr-5 relative">
-            <button className="hidden md:inline-block" onClick={toggleSearch}>
+            <button
+              className="hidden md:inline-block"
+              onClick={() => toggleSearch()}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -200,24 +186,26 @@ const Header = () => {
                   className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-96"
                 />
                 <div>
-                  <button onClick={clear}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                  {searchTerm.length > 2 && (
+                    <button onClick={clear}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-                {loading && <SearchDropDown results={results} clear={clear} />}
+                {loading || <SearchDropDown clear={clear} />}
               </div>
             </div>
           </div>
@@ -298,29 +286,31 @@ const Header = () => {
             autoComplete="off"
             onChange={e => setSearchTerm(e.target.value)}
             value={searchTerm}
-            placeholder="Search query"
+            placeholder="Search movies"
             className="bg-inherit outline-none placeholder:text-zinc-600 font-semibold w-full"
           />
           <div>
-            <button onClick={clear}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            {searchTerm.length > 2 && (
+              <button onClick={clear}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
-        {loading && <SearchDropDown results={results} clear={clear} />}
+        {loading || <SearchDropDown clear={clear} />}
       </div>
     </div>
   )

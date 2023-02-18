@@ -1,53 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import moment from "moment/moment"
 import { Link, useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { MovieContext } from "../context/MovieContext"
 
 const WatchList = () => {
   const [pageCount, setPageCount] = useState(4)
-  const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
-  const localMovies = localStorage.watchlist
-    ? JSON.parse(localStorage.watchlist)
-    : []
-  const [movies, setWatchlist] = useState(localMovies)
-  const [genres, setGenres] = useState(localGenres)
-  const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-  const navigate = useNavigate()
+
+  const {getGenre, getWatchlist, watchlist} = useContext(MovieContext)
 
   useEffect(() => {
-    const watchlist = async () => {
-      if (!movies.length)
-        await axios
-          .get(
-            "https://api.themoviedb.org/3/movie/now_playing?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1"
-          )
-          .then(res => {
-            let data = res.data.results
-            const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-            data.forEach(movie => {
-              let slug = movie.original_title
-                .replaceAll(" ", "-")
-                .replaceAll(":", "")
-                .replaceAll(",", "")
-                .toLowerCase()
-              movie.poster_path = IMAGE_URL + movie.poster_path
-              movie.backdrop_path = IMAGE_URL + movie.backdrop_path
-              Object.assign(movie, { slug })
-            })
-            setWatchlist([...data])
-            localStorage.setItem("watchlist", JSON.stringify(data))
-            let prevData = JSON.parse(localStorage.movies)
-            let newData = [...prevData, ...data]
-            localStorage.setItem('movies', JSON.stringify(newData))
-          })
-          .catch(err => err.message)
-    }
-    watchlist()
+    getWatchlist()
   }, [])
 
-  function getGenre(id) {
-    return genres.find(genre => id == genre.id).name
-  }
 
   return (
     <div>
@@ -59,7 +23,7 @@ const WatchList = () => {
         </div>
 
         <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-          {movies.map((movie, id) => (
+          {watchlist.map((movie, id) => (
             <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
               <div
                 className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
@@ -95,7 +59,7 @@ const WatchList = () => {
             </Link>
           ))}
         </div>
-        {pageCount >= movies.length || (
+        {pageCount >= watchlist.length || (
           <div className="flex justify-center items-center mt-10 mb-10">
             <br />
             <button
@@ -112,7 +76,6 @@ const WatchList = () => {
             </button>
             <button
               onClick={() => {
-                window.scrollTo(0, document.body.scrollHeight)
                 setPageCount(prevCount => prevCount + 4)
               }}
               className="text-xl font-bold px-3 py-2 rounded-lg bg-zinc-200 text-zinc-800 hidden lg:inline-block"
