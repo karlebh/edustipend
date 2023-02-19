@@ -53,7 +53,7 @@ const MovieContextProvider = ({ children }) => {
   const [movie] = useState([])
 
   const getGenre = id => {
-    return genres?.find(genre => id == genre.id).name
+    return genres?.find(genre => id == genre.id)?.name
   }
 
   const getMovies = async () => {
@@ -126,21 +126,42 @@ const MovieContextProvider = ({ children }) => {
         .get(movieData.popularActorsUrl)
         .then(res => {
           let data = res.data.results
+          data.forEach(actor => {
+            actor.profile_path = movieData.image_url + actor.profile_path
+          })
           setPopularActors([...data])
           localStorage.setItem("popularActors", JSON.stringify(data))
         })
         .catch(err => err.message)
   }
 
+  const showImage = imagePath => {
+    return movieData.image_url + imagePath
+  }
+
   const getTvShows = async () => {
-    await axios
-      .get(movieData.tvShowsUrl)
-      .then(res => {
-        let data = res.data.results
-        setTvShows([...data])
-        localStorage.setItem("tvShows", JSON.stringify(data))
-      })
-      .catch(err => err.message)
+
+    if (!tvShows.length)
+      await axios
+        .get(movieData.tvShowsUrl)
+        .then(res => {
+          // console.log(res.data.results)
+          let shows = res.data.results
+          // console.log(shows)
+          shows.forEach(movie => {
+            let slug = sluggify(movie.original_name)
+            // if (!movie.poster_path || !movie.backdrop_path)          
+            movie.poster_path = movieData.image_url + movie.poster_path
+            movie.backdrop_path = movieData.image_url + movie.backdrop_path
+            Object.assign(movie, { slug })
+          })
+          
+          console.log(shows)
+          setTvShows([...shows])
+          localStorage.setItem("tvShows", JSON.stringify(shows))
+       
+        })
+        .catch(err => err.message)
   }
 
   const toggleSearch = () => {
@@ -162,7 +183,7 @@ const MovieContextProvider = ({ children }) => {
 
   const getComingSoon = async () => {
     if (!comingSoon.length)
-      axios
+      await axios
         .get(movieData.comingSoonUrl)
         .then(res => {
           let data = res.data.results
@@ -211,10 +232,12 @@ const MovieContextProvider = ({ children }) => {
         popularActors,
         comingSoon,
         getPopularActors,
+        getComingSoon,
         getMovieCredit,
         setWatchlist,
         getWatchlist,
         getMovies,
+        getTvShows,
         getGenres,
         getGenre,
         toggleSearch,

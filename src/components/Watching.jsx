@@ -38,7 +38,7 @@ const Watching = () => {
         {movies.slice(0, pageCount).map((movie, id) => (
           <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
-              className={`flex-shrink-0 rounded-lg bg-zinc-800 hover:scale-105 cursor-pointer transition-all duration-500  `}
+              className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
             >
               <img
                 src={`${movie.backdrop_path}`}

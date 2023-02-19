@@ -68,3 +68,12 @@ body {
   cursor: pointer;
   border-radius: 7px;
 }
+
+.hide {
+  display: none;
+}
+
+.name:hover + .hide {
+  display: block;
+  color: red;
+}

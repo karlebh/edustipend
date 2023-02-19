@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { MovieContext } from "../context/MovieContext"
 
 const ComingSoon = () => {
-  const {genres, getComingSoon} = useContext(MovieContext)
+  const {genres, getComingSoon, movies, getGenre } = useContext(MovieContext)
 
   const [pageCount, setPageCount] = useState(4)
  
