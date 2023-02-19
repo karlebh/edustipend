@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useParams } from "react-router"
 import moment from "moment/moment"
-import axios from "axios"
+import { MovieContext } from "../context/MovieContext"
 
 const Details = () => {
   const { id } = useParams()
 
-  const localMovies = localStorage.movies ? JSON.parse(localStorage.movies) : []
-  const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
-  const [credits, setCredits] = useState([])
+  const { genres, getGenre, getMovieCredit, credits, loading } = useContext(MovieContext)
   const [movie, setMovie] = useState([])
-  function getGenre(id) {
-    return localGenres.find(genre => id == genre.id).name
-  }
 
   useEffect(() => {
-    async function getMovie(slug) {
+    async function getMovie(id) {
       await axios
         .get(
           `https://api.themoviedb.org/3/movie/${id}?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US`
@@ -25,26 +20,11 @@ const Details = () => {
           console.log(movie)
         })
     }
-    getMovie(name)
+    getMovie(id)
   }, [])
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US`
-      )
-      .then(resp => {
-        const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-        const casts = resp.data.cast
-        let newCasts = []
-        for (let i = 0; i < casts.length; i++) {
-          if (!casts[i].profile_path) continue
-          casts[i].profile_path = IMAGE_URL + casts[i].profile_path
-          newCasts.push(casts[i])
-        }
-        setCredits(newCasts)
-      })
-      .catch(err => console.log(err.message))
+    getMovieCredit(id)
   }, [])
 
   return (

@@ -15,7 +15,7 @@ import "@splidejs/splide/css/sea-green"
 import "@splidejs/splide/css/core"
 
 const Slider = ({ images }) => {
-  let screenSize = () => screen.width < 768 ? 4 : 3
+  let screenSize = () => (screen.width < 768 ? 4 : 3)
   useEffect(() => {
     let main = new Splide("#main-carousel", {
       type: "fade",
@@ -39,10 +39,7 @@ const Slider = ({ images }) => {
   }, [])
   return (
     <div className="h-[30rem] mt-5">
-      <section
-        id="main-carousel"
-        className="splide w-full p-0"
-      >
+      <section id="main-carousel" className="splide w-full p-0">
         <div className="splide__track">
           <ul className="splide__list">
             {images.map((movie, id) => (
@@ -73,15 +70,12 @@ const Slider = ({ images }) => {
 
                   <div className="">
                     <div className="flex items-center">
-                      <div>
-                        <button className="px-4 py-2 bg-amber-700 rounded-2xl text-gray-50 font-semibold">
-                          Watch
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="text-zinc-400 hidden md:inline mt-20">
-                      +5 friends are watching
+                      <button className="px-4 py-2 bg-amber-700 rounded-2xl text-gray-50 font-semibold">
+                        Watch
+                      </button>
+                      <span className="text-zinc-400 inline mt-20">
+                        +5 friends are watching
+                      </span>
                     </div>
                   </div>
                 </div>

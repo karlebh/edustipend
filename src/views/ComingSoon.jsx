@@ -1,54 +1,18 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import moment from "moment/moment"
 import { Link, useNavigate } from "react-router-dom"
+import { MovieContext } from "../context/MovieContext"
 
 const ComingSoon = () => {
-  const [pageCount, setPageCount] = useState(4)
+  const {genres, getComingSoon} = useContext(MovieContext)
 
-  const localGenres = localStorage.genres ? JSON.parse(localStorage.genres) : []
-  const localMovies = localStorage.comingSoon
-    ? JSON.parse(localStorage.comingSoon)
-    : []
-  const [movies, setLatestMovies] = useState(localMovies)
-  const [genres, setGenres] = useState(localGenres)
-  const IMAGE_URL = "https://image.tmdb.org/t/p/original/"
+  const [pageCount, setPageCount] = useState(4)
+ 
   const navigate = useNavigate()
 
   useEffect(() => {
-    async function getMovies() {
-    if (!movies.length)
-      axios
-        .request({
-          method: "GET",
-          url: `https://api.themoviedb.org/3/movie/upcoming?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
-        })
-        .then(res => {
-          let data = res.data.results
-            const IMAGE_URL = "https://image.tmdb.org/t/p/original"
-            data.forEach(movie => {
-              let slug = movie.original_title
-                .replaceAll(" ", "-")
-                .replaceAll(":", "")
-                .replaceAll(",", "")
-                .toLowerCase()
-              movie.poster_path = IMAGE_URL + movie.poster_path
-              movie.backdrop_path = IMAGE_URL + movie.backdrop_path
-              Object.assign(movie, { slug })
-            })
-          setLatestMovies([...data])
-          localStorage.setItem("comingSoon", JSON.stringify(data))
-          let prevData = JSON.parse(localStorage.movies)
-          let newData = [...prevData, ...data]
-          localStorage.setItem('movies', JSON.stringify(newData))
-        })
-        .catch(err => err.message)
-    }
-    getMovies()
+    getComingSoon()
   }, [])
-
-  function getGenre(id) {
-    return genres.find(genre => id == genre.id).name
-  }
 
   return (
     <section>
@@ -59,9 +23,9 @@ const ComingSoon = () => {
 
       <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {movies.map((movie, id) => (
-           <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
+          <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
-             className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
+              className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
             >
               <img
                 src={`${movie.backdrop_path}`}

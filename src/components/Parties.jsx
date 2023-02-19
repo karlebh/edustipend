@@ -11,34 +11,36 @@ const Parties = () => {
         <span className="ml-16 rounded-lg w-8 h-3.5 bg-amber-900 inline-block"></span>
       </div>
 
-      <div className="mt-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+      <div className="mt-5 grid sm:grid-cols-2 gap-4 w-full">
         {movies.slice(0, 12).map((movie, id) => (
           <Link to={`/movie/${movie.slug}/${movie.id}`} key={id}>
             <div
-              className={`flex-shrink-0 flex flex-col items-stretch justify-between rounded-lg h-48 bg-zinc-800 px-3 py-2 `}
+              className={`flex-shrink-0 flex items-stretch justify-between rounded-lg bg-zinc-800 h-32 max-h-[8rem]`}
             >
-              <div className="flex justify-between">
+              <div className="flex justify-between w-1/2">
                 <img
                   src={`${movie.backdrop_path}`}
-                  className="w-20 h-16 object-cover rounded-lg"
+                  className="h-full w-full rounded-l-lg"
                   alt=""
                 />
               </div>
 
-              <div className="">
-                <h1 className="font-bold text-sm text-zinc-300 text-left">
-                  {movie.title}
-                </h1>
-                <p>
-                  {movie.genre_ids.slice(0, 3).map((id, index) => (
-                    <span
-                      key={id}
-                      className="text-zinc-500 font-bold text-xs mr-1.5 text-left"
-                    >
-                      {getGenre(id)}
-                    </span>
-                  ))}
-                </p>
+              <div className="w-1/2 px-4 flex items-center flex-wrap">
+                <div>
+                  <h1 className="font-bold text-sm text-zinc-300 text-left">
+                    {movie.title}
+                  </h1>
+                  <p>
+                    {movie.genre_ids.slice(0, 2).map((id, index) => (
+                      <span
+                        key={id}
+                        className="text-zinc-500 font-bold text-xs mr-1.5 text-left"
+                      >
+                        {getGenre(id)}
+                      </span>
+                    ))}
+                  </p>
+                </div>
               </div>
             </div>
           </Link>

@@ -42,7 +42,7 @@ const Watching = () => {
             >
               <img
                 src={`${movie.backdrop_path}`}
-                className="w-full min-h-[12rem] object-cover rounded-t-lg"
+                className="w-full min-h-[12rem] rounded-t-lg"
                 alt=""
               />
               <div className="px-3 h-44   overflow-hidden mt-3 flex flex-col justify-evenly">

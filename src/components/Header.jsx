@@ -11,9 +11,9 @@ import { MovieContext } from "../context/MovieContext"
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [showMenu, setShow] = useState(false)
-  const [loading, setLoading] = useState(false)
+ 
 
-  const { movieData, addResults, toggleSearch } = useContext(MovieContext)
+  const { movieData, addResults, toggleSearch, loading, setLoading } = useContext(MovieContext)
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
   const clear = () => setSearchTerm("")
@@ -53,7 +53,7 @@ const Header = () => {
 
   return (
     <div>
-      <header className="flex items-center justify-between">
+      <header className="flex items-center justify-between w-[90%] mx-auto">
         <div className="flex items-center">
           <Link to={"/"}>
             <h1 className="text-xl font-bold font-sans lg:hidden">Movies</h1>

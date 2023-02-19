@@ -1,9 +1,15 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
-import { useLocation } from "react-router-dom"
+import React, { useContext, useEffect } from "react"
+import { useLocation, Link } from "react-router-dom"
+import { MovieContext } from "../context/MovieContext"
 
 const SideBar = () => {
   const location = useLocation()
+  const { getPopularActors, popularActors } = useContext(MovieContext)
+
+  useEffect(() => {
+    getPopularActors()
+  }, [])
+
   return (
     <aside className="hidden lg:block border-r border-zinc-800 pt-10 min-w-[20%]">
       <h1 className="text-xl font-bold font-sans pl-16">Movies</h1>
@@ -113,11 +119,10 @@ const SideBar = () => {
 
       <div className="mt-5 mb-20">
         <h2 className="text-zinc-600 font-bold text-sm font-sans pl-16">
-          Following
+          Popular Actors
         </h2>
 
-        <div className="mt-7 inline-flex flex-col gap-y-4 pl-16">
-        </div>
+        <div className="mt-7 inline-flex flex-col gap-y-4 pl-16"></div>
       </div>
 
       {/* <div className="flex pl-16 items-center">
