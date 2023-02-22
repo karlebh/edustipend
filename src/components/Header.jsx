@@ -13,7 +13,8 @@ const Header = () => {
   const [showMenu, setShow] = useState(false)
  
 
-  const { movieData, addResults, toggleSearch, loading, setLoading } = useContext(MovieContext)
+  const { movieData, addResults, toggleSearch, sluggify } = useContext(MovieContext)
+  const [loading, setLoading] = useState(false)
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
   const clear = () => setSearchTerm("")
@@ -26,11 +27,7 @@ const Header = () => {
       .then(res => {
         let data = res.data.results
         data.forEach(movie => {
-          let slug = movie.original_title
-            .replaceAll(" ", "-")
-            .replaceAll(":", "")
-            .replaceAll(",", "")
-            .toLowerCase()
+          let slug = sluggify(movie.original_title)
           movie.poster_path = movieData.image_url + movie.poster_path
           movie.backdrop_path = movieData.image_url + movie.backdrop_path
           Object.assign(movie, { slug })
@@ -47,13 +44,12 @@ const Header = () => {
       setLoading(false)
     } else {
       addResults([])
-      setLoading(true)
     }
   }, [debouncedSearchTerm])
 
   return (
-    <div>
-      <header className="flex items-center justify-between w-[90%] mx-auto">
+    <div className="lg:px-10 w-full lg:min-w-[80%] bg-natural-500 overflow-hidden">
+      <header className="flex items-center justify-between mx-auto">
         <div className="flex items-center">
           <Link to={"/"}>
             <h1 className="text-xl font-bold font-sans lg:hidden">Movies</h1>
@@ -260,7 +256,7 @@ const Header = () => {
         </div>
       </header>
       {/* Mobile Screen */}
-      <div className="relative w-full md:hidden">
+      <div className="relative w-[98%] mx-auto md:hidden">
         <div
           className="flex items-center rounded-3xl border border-zinc-800 px-8 mt-5 gap-x-4 transition-all 
       duration-100 hover:outline hover:outline-zinc-500 hover:outline-offset-2"

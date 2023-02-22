@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react"
 
 import Slider from "../components/Slider"
-import Parties from "../components/Parties"
+import TVShows from "../components/TVShows"
 import Watching from "../components/Watching"
 
 import { MovieContext } from "../context/MovieContext"
@@ -19,14 +19,13 @@ const Home = () => {
   }, [])
 
   return (
-    <main className="lg:px-10 pt-3 lg:pt-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
-      
+    <div className="lg:px-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       <span>
         <Slider images={movies} />
-        <Parties />
+        <TVShows />
         <Watching />
       </span>
-    </main>
+    </div>
   )
 }
 

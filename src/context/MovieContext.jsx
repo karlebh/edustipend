@@ -12,9 +12,6 @@ const MovieContextProvider = ({ children }) => {
   const localpopularActors = localStorage.popularActors
     ? JSON.parse(localStorage.popularActors)
     : []
-  const localWatchlist = localStorage.watchlist
-    ? JSON.parse(localStorage.watchlist)
-    : []
   const localComingSoon = localStorage.comingSoon
     ? JSON.parse(localStorage.comingSoon)
     : []
@@ -22,9 +19,10 @@ const MovieContextProvider = ({ children }) => {
   const data = {
     number: localStorage.movies ? JSON.parse(localStorage.movies) : [],
     searchResults: [],
-    loading: false,
-    genreUrl:
+    genreUrl: [
+      "https://api.themoviedb.org/3/genre/tv/list?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US",
       "https://api.themoviedb.org/3/genre/movie/list?api_key=7316fba02f75311274d240dc8ac61a66",
+    ],
     options: {
       method: "GET",
       url: "https://api.themoviedb.org/3/movie/popular?api_key=7316fba02f75311274d240dc8ac61a66",
@@ -32,10 +30,10 @@ const MovieContextProvider = ({ children }) => {
     popularActorsUrl:
       "https://api.themoviedb.org/3/person/popular?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1",
     tvShowsUrl:
-      "https://api.themoviedb.org/3/tv/popular?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1",
+      "https://api.themoviedb.org/3/tv/top_rated?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1",
     watchlistUrl:
       "https://api.themoviedb.org/3/movie/now_playing?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1",
-    image_url: "https://image.tmdb.org/t/p/original/",
+    image_url: "https://image.tmdb.org/t/p/original",
     comingSoonUrl: `https://api.themoviedb.org/3/movie/upcoming?api_key=7316fba02f75311274d240dc8ac61a66&language=en-US&page=1`,
   }
 
@@ -44,7 +42,7 @@ const MovieContextProvider = ({ children }) => {
   const [movies, setMovies] = useState(localMovies)
   const [comingSoon, setComingSoon] = useState(localComingSoon)
   const [results, setResults] = useState([])
-  const [watchlist, setWatchlist] = useState(localWatchlist)
+
   const [popularActors, setPopularActors] = useState(localpopularActors)
   const [tvShows, setTvShows] = useState(localtvShows)
   const [loading, setLoading] = useState(false)
@@ -56,7 +54,13 @@ const MovieContextProvider = ({ children }) => {
     return genres?.find(genre => id == genre.id)?.name
   }
 
+  const imagify = imgPath => {
+    if (!imgPath) return
+    return movieData.image_url + imgPath
+  }
+
   const getMovies = async () => {
+    setLoading(true)
     await axios
       .request(movieData.options)
       .then(response => {
@@ -69,51 +73,38 @@ const MovieContextProvider = ({ children }) => {
         })
         setMovies([...data])
         localStorage.setItem("movies", JSON.stringify([...data]))
+        setLoading(false)
       })
       .catch(error => {
         console.error(error)
       })
   }
 
-  const sluggify = name =>
-    name
+  const sluggify = name => {
+    return name
       .replaceAll(" ", "-")
       .replaceAll(":", "")
       .replaceAll(",", "")
       .toLowerCase()
-
-  const getGenres = async () => {
-    await axios
-      .get(movieData.genreUrl)
-      .then(response => {
-        console.log(response.data)
-        setGenres([...response.data.genres])
-        localStorage.setItem(
-          "genres",
-          JSON.stringify([...response.data.genres])
-        )
-      })
-      .catch(error => {
-        console.error(error)
-      })
   }
 
-  const getWatchlist = async () => {
-    if (!watchlist.length)
+  const getGenres = async () => {
+    setLoading(true)
+    for (let url of movieData.genreUrl) {
       await axios
-        .get(movieData.watchlistUrl)
-        .then(res => {
-          let data = res.data.results
-          data.forEach(movie => {
-            let slug = sluggify(movie.original_title)
-            movie.poster_path = movieData.image_url + movie.poster_path
-            movie.backdrop_path = movieData.image_url + movie.backdrop_path
-            Object.assign(movie, { slug })
-          })
-          setWatchlist([...data])
-          localStorage.setItem("watchlist", JSON.stringify(data))
+        .get(url)
+        .then(response => {
+          setGenres([...genres, ...response.data.genres])
+          localStorage.setItem(
+            "genres",
+            JSON.stringify([...genres, ...response.data.genres])
+          )
         })
-        .catch(err => err.message)
+        .catch(error => {
+          console.error(error)
+        })
+    }
+    setLoading(false)
   }
 
   const addResults = results => {
@@ -140,26 +131,32 @@ const MovieContextProvider = ({ children }) => {
   }
 
   const getTvShows = async () => {
-
     if (!tvShows.length)
       await axios
         .get(movieData.tvShowsUrl)
         .then(res => {
-          // console.log(res.data.results)
           let shows = res.data.results
-          // console.log(shows)
-          shows.forEach(movie => {
+
+          // for (let tv = 0; tv < shows.length; tv++) {
+          //   if (!shows[tv].poster_path || !shows[tv].backdrop_path) continue
+          //   let slug = sluggify(shows[tv].original_title)
+          //   shows[tv].poster_path = movieData.image_url + shows[tv].poster_path
+          //   shows[tv].backdrop_path =
+          //     movieData.image_url + shows[tv].backdrop_path
+          //   Object.assign(shows[tv], { slug })
+          // }
+
+          shows.forEach((movie, id) => {
             let slug = sluggify(movie.original_name)
-            // if (!movie.poster_path || !movie.backdrop_path)          
+            // if (!movie.poster_path || !movie.backdrop_path)
             movie.poster_path = movieData.image_url + movie.poster_path
             movie.backdrop_path = movieData.image_url + movie.backdrop_path
             Object.assign(movie, { slug })
           })
-          
+
           console.log(shows)
           setTvShows([...shows])
           localStorage.setItem("tvShows", JSON.stringify(shows))
-       
         })
         .catch(err => err.message)
   }
@@ -182,21 +179,20 @@ const MovieContextProvider = ({ children }) => {
   }
 
   const getComingSoon = async () => {
-    if (!comingSoon.length)
-      await axios
-        .get(movieData.comingSoonUrl)
-        .then(res => {
-          let data = res.data.results
-          data.forEach(movie => {
-            let slug = sluggify(movie.original_title)
-            movie.poster_path = movieData.image_url + movie.poster_path
-            movie.backdrop_path = movieData.image_url + movie.backdrop_path
-            Object.assign(movie, { slug })
-          })
-          setComingSoon([...data])
-          localStorage.setItem("comingSoon", JSON.stringify(data))
+    await axios
+      .get(movieData.comingSoonUrl)
+      .then(res => {
+        let data = res.data.results
+        data.forEach(movie => {
+          let slug = sluggify(movie.original_title)
+          movie.poster_path = movieData.image_url + movie.poster_path
+          movie.backdrop_path = movieData.image_url + movie.backdrop_path
+          Object.assign(movie, { slug })
         })
-        .catch(err => err.message)
+        setComingSoon([...data])
+        localStorage.setItem("comingSoon", JSON.stringify(data))
+      })
+      .catch(err => err.message)
   }
 
   const getMovieCredit = async id => {
@@ -228,14 +224,16 @@ const MovieContextProvider = ({ children }) => {
         loading,
         results,
         movieData,
-        watchlist,
+        // watchlist,
         popularActors,
         comingSoon,
+        imagify,
+        sluggify,
         getPopularActors,
         getComingSoon,
         getMovieCredit,
-        setWatchlist,
-        getWatchlist,
+        // setWatchlist,
+        // getWatchlist,
         getMovies,
         getTvShows,
         getGenres,

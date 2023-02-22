@@ -2,7 +2,7 @@ import "react-placeholder/lib/reactPlaceholder.css"
 import { TextBlock } from "react-placeholder/lib/placeholders"
 
 const Loader = (
-  <div className="my-awesome-placeholder">
+  <div className="mt-3">
     <TextBlock
       rows={7}
       className=""
