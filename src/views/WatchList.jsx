@@ -39,7 +39,7 @@ const WatchList = () => {
   }, [])
 
   return (
-    <div>
+    <div className="lg:px-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       <ReactPlaceholder
         showLoadingAnimation
         type="media"

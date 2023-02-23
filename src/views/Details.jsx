@@ -32,12 +32,12 @@ const Details = () => {
   }, [])
 
   return (
-    <>
+    <div className="lg:px-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
       <ReactPlaceholder
         showLoadingAnimation
         type="media"
         rows={7}
-        ready={loading}
+        ready={!loading}
         customPlaceholder={Loader}
       >
         <div className="mt-5 text-center mb-10">
@@ -102,7 +102,7 @@ const Details = () => {
           </div>
         </div>
       </ReactPlaceholder>
-    </>
+    </div>
   )
 }
 
