@@ -7,12 +7,11 @@ import MobileDropDownLinks from "./MobileDropDownLinks"
 import useDebounce from "../utils/useDebounce"
 import { useContext } from "react"
 import { MovieContext } from "../context/MovieContext"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [showMenu, setShow] = useState(false)
- 
-
   const { movieData, addResults, toggleSearch, sluggify } = useContext(MovieContext)
   const [loading, setLoading] = useState(false)
 
@@ -48,7 +47,7 @@ const Header = () => {
   }, [debouncedSearchTerm])
 
   return (
-    <div className="lg:px-10 w-full lg:min-w-[80%] bg-natural-500 overflow-hidden">
+    <div className="lg:px-10 w-full lg:min-w-[80%] bg-natural-500">
       <header className="flex items-center justify-between mx-auto">
         <div className="flex items-center">
           <Link to={"/"}>
@@ -244,7 +243,8 @@ const Header = () => {
               className="h-9 w-9 flex justify-center items-center rounded-full grad"
               onClick={() => setShow(!showMenu)}
             >
-              <img
+               <LazyLoadImage
+                  effect="blur"
                 src={a}
                 className="object-cover w-8 h-8 rounded-full"
                 alt=""

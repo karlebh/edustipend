@@ -3,6 +3,7 @@ import Splide from "@splidejs/splide"
 import { AutoScroll } from "@splidejs/splide-extension-auto-scroll"
 import imdb from "../assets/imdb.png"
 import usa from "../assets/usa.jpg"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 // Default theme
 import "@splidejs/splide/css"
@@ -73,24 +74,26 @@ const Slider = ({ images }) => {
                       <button className="px-4 py-2 bg-amber-700 rounded-2xl text-gray-50 font-semibold">
                         Watch
                       </button>
-                      <span className="text-zinc-400 inline mt-20">
+                      {/* <span className="text-zinc-400 inline mt-20">
                         +5 friends are watching
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
-                <img
-                  src={`${movie.poster_path}`}
-                  alt=""
-                  className="h-inherit w-full md:w-1/2 image md:hidden"
-                  id={id}
-                />
-                <img
-                  src={`${movie.backdrop_path}`}
-                  alt=""
-                  className="h-inherit w-full md:w-1/2 image hidden md:inline-block"
-                  id={id}
-                />
+                <div className="h-full md:flex w-full md:w-1/2">
+                  <img
+                    src={`${movie.poster_path}`}
+                    alt=""
+                    className="image md:hidden contain"
+                    id={id}
+                  />
+                  <img
+                    src={`${movie.backdrop_path}`}
+                    alt=""
+                    className="image hidden md:inline-block"
+                    id={id}
+                  />
+                </div>
               </li>
             ))}
           </ul>

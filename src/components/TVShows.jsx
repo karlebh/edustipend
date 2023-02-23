@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { MovieContext } from "../context/MovieContext"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const Parties = () => {
   const { getGenre, tvShows, getTvShows } = useContext(MovieContext)
@@ -22,7 +23,8 @@ const Parties = () => {
               className={`flex-shrink-0 flex items-stretch justify-between rounded-lg bg-zinc-800 h-32 max-h-[8rem] lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500`}
             >
               <div className="flex justify-between w-1/2">
-                <img
+              <LazyLoadImage
+                  effect="blur"
                   src={`${movie.backdrop_path}`}
                   className="h-full w-full rounded-l-lg"
                   alt=""

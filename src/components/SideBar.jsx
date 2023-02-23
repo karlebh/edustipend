@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { useLocation, Link } from "react-router-dom"
 import { MovieContext } from "../context/MovieContext"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const SideBar = () => {
   const location = useLocation()
@@ -131,7 +132,12 @@ const SideBar = () => {
               className="cursor-pointer hover:underline relative"
             >
               <div id={actor.id} className="hide">
-                <img src={actor.profile_path} alt="" className="w-20 h-20" />
+                <LazyLoadImage
+                  effect="blur"
+                  src={actor.profile_path}
+                  alt=""
+                  className="w-20 h-20"
+                />
               </div>
               <p className="name">{actor.name}</p>
             </div>

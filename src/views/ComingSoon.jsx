@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { MovieContext } from "../context/MovieContext"
 import ReactPlaceholder from "react-placeholder/lib"
 import Loader from "../components/Loader"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const ComingSoon = () => {
   const { getComingSoon, comingSoon, getGenre } = useContext(MovieContext)
@@ -40,7 +41,8 @@ const ComingSoon = () => {
               <div
                 className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
               >
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   src={`${movie.backdrop_path}`}
                   className="w-full min-h-[12rem] object-cover rounded-t-lg"
                   alt=""

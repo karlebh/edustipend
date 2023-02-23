@@ -4,6 +4,7 @@ import moment from "moment/moment"
 import { MovieContext } from "../context/MovieContext"
 import ReactPlaceholder from "react-placeholder/lib"
 import Loader from "../components/Loader"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const Details = () => {
   const { id } = useParams()
@@ -45,7 +46,8 @@ const Details = () => {
             {movie.original_title}
           </h1>
 
-          <img
+          <LazyLoadImage
+                  effect="blur"
             src={imagify(movie.poster_path)}
             className="h-[20rem] lg:h-[40rem] w-[98%] md:w-[80%] mx-auto rounded-lg"
             alt=""
