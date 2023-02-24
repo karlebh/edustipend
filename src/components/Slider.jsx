@@ -82,14 +82,16 @@ const Slider = ({ images }) => {
                 </div>
                 <div className="h-full md:flex w-full md:w-1/2">
                   {/* mobile */}
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     src={`${movie.poster_path}`}
                     alt=""
                     className="h-full w-full md:hidden"
                     id={id}
                   />
                   {/* desktop */}
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     src={`${movie.backdrop_path}`}
                     alt=""
                     className="h-full w-full hidden md:inline-block"
