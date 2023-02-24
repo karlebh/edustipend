@@ -81,16 +81,18 @@ const Slider = ({ images }) => {
                   </div>
                 </div>
                 <div className="h-full md:flex w-full md:w-1/2">
+                  {/* mobile */}
                   <img
                     src={`${movie.poster_path}`}
                     alt=""
-                    className="image md:hidden contain"
+                    className="h-full w-full md:hidden"
                     id={id}
                   />
+                  {/* desktop */}
                   <img
                     src={`${movie.backdrop_path}`}
                     alt=""
-                    className="image hidden md:inline-block"
+                    className="h-full w-full hidden md:inline-block"
                     id={id}
                   />
                 </div>

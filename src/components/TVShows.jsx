@@ -6,7 +6,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component"
 
 const Parties = () => {
   const { getGenre, tvShows, getTvShows } = useContext(MovieContext)
-  useEffect(()=> {
+  useEffect(() => {
     getTvShows()
   }, [])
   return (
@@ -23,7 +23,7 @@ const Parties = () => {
               className={`flex-shrink-0 flex items-stretch justify-between rounded-lg bg-zinc-800 h-32 max-h-[8rem] lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500`}
             >
               <div className="flex justify-between w-1/2">
-              <LazyLoadImage
+                <LazyLoadImage
                   effect="blur"
                   src={`${movie.backdrop_path}`}
                   className="h-full w-full rounded-l-lg"

@@ -30,7 +30,7 @@ const Details = () => {
     setLoading(true)
     getMovieCredit(id)
     setLoading(false)
-  }, [])
+  }, [movie, credits])
 
   return (
     <div className="lg:px-10 w-full lg:min-w-[80%] mb-14 bg-natural-500 overflow-hidden">
@@ -47,12 +47,11 @@ const Details = () => {
           </h1>
 
           <LazyLoadImage
-                  effect="blur"
+            effect="blur"
             src={imagify(movie.poster_path)}
-            className="h-[20rem] lg:h-[40rem] w-[98%] md:w-[80%] mx-auto rounded-lg"
+            className="w-full h-full rounded-lg mx-auto"
             alt=""
           />
-
           <div className="mt-4">
             {movie?.genre_ids?.map(id => (
               <span key={id} className="text-xl font-semibold mr-5">
@@ -81,11 +80,12 @@ const Details = () => {
             {credits.slice(0, 16).map((cast, id) => (
               <div
                 key={id}
-                className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 lg:cursor-pointer lg:transition-all lg:duration-500  `}
+                className={`flex-shrink-0 flex flex-col overflow-hidden rounded-lg bg-zinc-800 lg:hover:scale-105 lg:cursor-pointer lg:transition-all lg:duration-500  `}
               >
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   src={`${cast.profile_path}`}
-                  className="h-[15rem] w-full min-h-[12rem] rounded-t-lg"
+                  className="h-[15rem] min-h-[12rem] w-full rounded-t-lg"
                   alt=""
                 />
                 <div className="px-3 h-32 overflow-hidden mt-3 flex flex-col justify-evenly">

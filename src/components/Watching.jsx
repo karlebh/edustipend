@@ -41,8 +41,8 @@ const Watching = () => {
             <div
               className={`flex-shrink-0 rounded-lg bg-zinc-800 lg:hover:scale-105 cursor-pointer lg:transition-all lg:duration-500  `}
             >
-               <LazyLoadImage
-                  effect="blur"
+              <LazyLoadImage
+                effect="blur"
                 src={`${movie.backdrop_path}`}
                 className="w-full min-h-[12rem] rounded-t-lg"
                 alt=""
