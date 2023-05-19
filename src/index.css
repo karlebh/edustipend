@@ -1,80 +1,212 @@
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 
 body {
-  font-size: 'Nunito';
+  background-color: #ccc;
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+  padding: 20px;
 }
 
-.grad {
-  background-image: linear-gradient(to right, white,orange,yellow);
-}
-
-.growDown {
-  animation: growDown 300ms ease-in-out forwards;
-  transform-origin: top center;
-}
-
-@keyframes growDown {
-  0% {
-    transform: scaleY(0);
-  }
-  80% {
-    transform: scaleY(1.1);
-  }
-  100% {
-    transform: scaleY(1);
-  }
-}
-.growUp {
-  animation: growUp 300ms ease-in-out;
-  transform-origin: bottom center;
-}
-
-@keyframes growUp {
-  0% {
-    transform: scaleY(1);
-  }
-  80% {
-    transform: scaleY(1.1);
-  }
-  100% {
-    transform: scaleY(0);
+@media screen and (min-width: 1330px) {
+  body {
+    padding: 0;
   }
 }
 
-.splide__slide {
-  opacity: 0.4;
+button {
+  border-radius: 8px;
 }
 
-.splide__slide.is-active {
-  opacity: 1;
+.wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-.searchDisplay::-webkit-scrollbar{
-  width: 1rem;
+.header {
+  margin: 2.5rem 0 auto;
+  padding: 1rem 1rem;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  display: flex;
+  justify-content: end;
 }
 
-.searchDisplay::-webkit-scrollbar-track {
-  border-right: 9px solid transparent;
-  border-left: 9px solid transparent;
-  background-color: transparent;
-  -webkit-box-shadow: inset 0 0 6px #ddd;
+.header a {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
 }
 
-.searchDisplay::-webkit-scrollbar-thumb {
-  background: #ccc;
-  cursor: pointer;
-  border-radius: 7px;
+@media screen and (min-width: 1330px) {
+  .header a {
+    text-decoration: none;
+    color: black;
+    font-size: 22px;
+  }
 }
 
-.hide {
-  display: none;
+.header a:not(.sign-up) {
+  margin-right: 19px;
 }
 
-.name:hover + .hide {
-  display: block;
-  color: red;
+a.sign-up {
+  background-color: #ffa500;
+  border-radius: 8px;
+  padding: 5px 25px;
+  border: 1px solid black;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  margin: 17px auto;
+  justify-content: space-between;
+  row-gap: 40px;
+}
+
+@media screen and (min-width: 1330px) {
+  main {
+    flex-direction: row;
+    row-gap: 0;
+  }
+}
+
+@media screen and (min-width: 1330px) {
+  main div.container {
+    margin-left: 30px;
+    width: 70%;
+  }
+}
+
+main div.container h1 {
+  margin-top: 2rem;
+  font-size: 30px;
+}
+
+@media screen and (min-width: 720px) {
+  main div.container h1 {
+    margin-top: 2rem;
+    font-size: 40px;
+  }
+  
+}
+
+@media screen and (min-width: 1330px) {
+  main div.container h1 {
+    margin-top: 7rem;
+    font-size: 60px;
+  }
+}
+
+main div.container p {
+  margin-top: 1rem;
+  font-size: 20px;
+}
+
+@media screen and (min-width: 720px) {
+  main div.container p {
+    margin-top: 2rem;
+    font-size: 30px;
+  }
+  
+}
+
+@media screen and (min-width: 1330px) {
+  main div.container p {
+    margin-top: 1rem;
+    font-size: 40px;
+  }
+}
+
+main div.container button {
+  padding: 10px 10px;
+  margin-top: 2.8rem;
+  background-color: #ffa500;
+  font-size: 18px;
+}
+
+@media screen and (min-width: 1330px) {
+  main div.container button {
+    padding: 10px 10px;
+    margin-top: 2.8rem;
+    background-color: #ffa500;
+    font-size: 20px;
+  }
+}
+
+main div.song-container {
+  background-color: #565656;
+  padding-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 20px;
+}
+
+@media screen and (min-width: 720px) {
+  main div.song-container {
+    background-color: #565656;
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 20px;
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 1330px) {
+  main div.song-container {
+    background-color: #565656;
+    width: 25%;
+  }
+}
+
+.song-container h3 {
+  text-align: center;
+  font-weight: 900;
+}
+
+.song-list {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+button.song {
+  padding: 8px 8px;
+  margin: 10px 0;
+  width: 90%;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+button.song:first-child {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+button.view-more {
+  padding: 5px 14px;
+  color: black;
+  font-weight: 400;
+  font-size: 20px;
+  background-color: #ffa500;
+}
+
+.plus {
+  font-weight: 600;
+  font-size: large;
+}
+
+.artist-name {
+  font-style: italic;
 }
